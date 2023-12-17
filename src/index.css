@@ -1,13 +1,134 @@
-body {
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+   height: 100vh; 
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+} */
+
+body,html {
+  margin: 0;
+  padding: 0;
+}
+* {
+  box-sizing: border-box;
+}
+.login-page{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.btn{
+  margin: 20px;
+  cursor: pointer;
+  background-color: inherit;
+  text-decoration: none;
+}
+
+.login-main{
+  width: 100%;
+  height: 100%;
+  display: flex;  
+  flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+
+.sidebar-nav-main{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.sidebar-main{
+   display: flex;
+   /* width: 100%; */
+   /* flex: 0.2; */
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   border-right: 2px solid grey;
+}
+
+a{
+  text-decoration: none;
+  font-weight: bolder;
+  font-size: x-large;
+  color: black;
+  font-family:sans-serif;
+  margin: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+a:active{
+  text-decoration: underline;
+  /* border:1px solid black; */
+  /* background-color: grey; */
+}
+
+.img{
+  border-radius: 50%;
+  height: 200px;
+  width: 200px;
+}
+
+.profile-main,.portal-main{
+  height: auto;
+  flex-grow: 0.8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 50px;
+}
+
+.myjobs-main{
+  flex: 0.8;
+  overflow: auto;
+}
+.profile-name,.profile-dob{
+  margin: 20px;
+}
+
+
+
+.role{
+  font-weight: bolder;
+  font-size: x-large;
+}
+
+.drop-down{
+  width: 300px;
+  height: 40px;
+}
+
+img{
+  width: 300px;
+}
+
+.job-title{
+  font-size: x-large;
+  border: 2px solid grey;
+  width: 50%;
+  text-align: center;
+}
+
+.job{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
