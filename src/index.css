@@ -132,3 +132,8 @@ img{
   justify-content: center;
   align-items: center;
 }
+
+.btn{
+  font-size: large;
+  font-weight: bold;
+}
