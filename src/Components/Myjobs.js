@@ -7,7 +7,6 @@ const Myjobs = () => {
   const [jobs,setJobs]=useState([])
 
   useEffect(()=>{
-    console.log(jobs);
      const fun=async()=>{
       const data=localStorage.getItem('userdata')
       const jsonData=JSON.parse(data)

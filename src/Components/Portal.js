@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 const Portal = () => {
   const [selectedRole,setSelectedRole]=useState("Retail/B2C Sales - Inside Sales")
@@ -8,6 +10,7 @@ const Portal = () => {
     setSelectedRole(e.target.value);
   }
   const handleAddjobs=async()=>{
+    toast("Job Added");
     const data=localStorage.getItem('userdata')
     const jsonData=JSON.parse(data)
   const config = {
@@ -42,6 +45,7 @@ const Portal = () => {
       <button onClick={handleAddjobs} className="btn">
         Add to my jobs
       </button>
+      <ToastContainer></ToastContainer>
     </div>
   );
 };
