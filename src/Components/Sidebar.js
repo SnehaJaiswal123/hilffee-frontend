@@ -13,12 +13,12 @@ export default function Sidebar() {
   return (
     <div className="sidebar-main">
         <div className="sidebar-nav-main">
-      <AppBar position="static">
-        <Toolbar>
-        <Link to="/app">Profile</Link>
-        <Link to="/app/portal">Job Portal</Link>
-        <Link to="/app/jobs">My Jobs</Link>
-        <Link to='/' onClick={signout}>signOut</Link>
+      <AppBar position="static" style={{width:"100%"}}>
+        <Toolbar style={{width:"100%"}}>
+          <Link to="/app">Profile</Link>
+          <Link to="/app/portal">Job Portal</Link>
+          <Link to="/app/jobs">My Jobs</Link>
+          <Link to='/' onClick={signout}>signOut</Link>
         </Toolbar>
       </AppBar>
     </div>

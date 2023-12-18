@@ -137,3 +137,10 @@ img{
   font-size: large;
   font-weight: bold;
 }
+
+.vdopreview{
+  /* display: flex; */
+  /* justify-content: center; */
+  width: 100%;
+  /* height: 100vh; */
+}

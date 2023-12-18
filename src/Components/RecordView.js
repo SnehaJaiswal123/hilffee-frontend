@@ -1,62 +1,68 @@
-import React, { useState } from 'react';
-import { useReactMediaRecorder } from 'react-media-recorder';
-import axios from 'axios';
+import { useEffect, useRef } from "react";
+import { useReactMediaRecorder } from "react-media-recorder";
 
-const VideoRecorder = () => {
-  const [mediaBlob, setMediaBlob] = useState(null);
-  const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({
-    video: true,
-    onStop: (blob) => {
-      setMediaBlob(blob);
-    },
-  });
+const RecordView = () => {
+  const { status,previewStream, startRecording, stopRecording, mediaBlobUrl } =
+    useReactMediaRecorder({ video: true });
 
-  const [isUploading, setIsUploading] = useState(false);
+    const submitRecording=()=>{
 
-  const handleStartRecording = () => {
-    startRecording();
-  };
-
-  const handleStopRecording = () => {
-    stopRecording();
-  };
-
-  const handleSaveVideo = async () => {
-    if (!mediaBlob) {
-      console.error('No recorded video to save.');
-      return;
     }
 
-    setIsUploading(true);
-
-    try {
-      const videoUrl = URL.createObjectURL(mediaBlob);
-
-      console.log('Recorded Video URL:', videoUrl);
-
-    } catch (error) {
-      console.error('Error handling recorded video:', error);
-    } finally {
-      setIsUploading(false);
+    const ReStartRecording=()=>{
+      stopRecording()
+      startRecording()
     }
-  };
+
+    const VideoPreview = ({ stream }) => {
+      const videoRef = useRef(null);
+    
+      useEffect(() => {
+        if (videoRef.current && stream) {
+          videoRef.current.srcObject = stream;
+        }
+      }, [stream]);
+      if (!stream) {
+        return null;
+      }
+      return <video ref={videoRef} width={500} height={500} autoPlay controls />;
+    };
 
   return (
     <div>
-      <video
-        controls
-        width="500"
-        height="400"
-        src={status === 'recording' ? undefined : {mediaBlob}}
-      />
-      <div>
-        {status === 'idle' && <button onClick={handleStartRecording}>Start Recording</button>}
-        {status === 'recording' && <button onClick={handleStopRecording}>Stop Recording</button>}
-        {status === 'stopped' && <button onClick={handleSaveVideo} disabled={isUploading}>Save Video</button>}
-        {isUploading && <p>Uploading...</p>}
-      </div>
+      {
+        status==='idle'?
+        <>
+        <video src={mediaBlobUrl} controls />
+        <button className='btn' onClick={startRecording}>Start Recording</button>
+        </>:
+        <>
+        </>
+      }
+  
+      {(status=='recording')?
+        <div className="vdopreview"><VideoPreview stream={previewStream}/></div>:
+         <></>
+      }
+      {status=='recording'?
+          <>
+          <button className='btn' onClick={stopRecording}>Stop Recording</button>
+          <button className='btn' onClick={ReStartRecording}>Restart Recording</button>
+          </>:
+          <></>
+      }
+      {
+        status=='stopped'?
+        <>
+        <video src={mediaBlobUrl} controls />
+        <button className='btn' onClick={submitRecording}>Submit</button>
+        </>:
+        <></>
+      }
+      
+      
     </div>
   );
 };
 
-export default VideoRecorder;
+export default RecordView
