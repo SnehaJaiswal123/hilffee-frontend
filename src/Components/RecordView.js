@@ -5,8 +5,25 @@ const RecordView = () => {
   const { status,previewStream, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ video: true });
 
-    const submitRecording=()=>{
-
+    const submitRecording=async()=>{
+      try {
+        const formData = new FormData();
+        formData.append('file', new File([mediaBlobUrl], 'recorded-video.webm'));
+    
+        const response = await axios.post('https://hilfee-backend.onrender.com/recording', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+    
+        console.log(response.data);
+    
+      } catch (error) {
+        console.error('Error uploading video:', error);
+    
+      } finally {
+        setIsUploading(false);
+      }
     }
 
     const ReStartRecording=()=>{
