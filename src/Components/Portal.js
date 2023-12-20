@@ -13,8 +13,8 @@ const Portal = () => {
     toast("Job Added");
     const data=localStorage.getItem('userdata')
     const jsonData=JSON.parse(data)
-  const config = {
-      headers: { "Content-type": "application/json",},
+    const config = {
+      headers: { "Content-type": "application/json"},
     };
     await axios.post('https://hilfee-backend.onrender.com/createjob/',
     {

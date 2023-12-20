@@ -6,6 +6,7 @@ import Myjobs from "./Components/Myjobs";
 import  Portal  from "./Components/Portal";
 import RecordView from "./Components/RecordView";
 import Logout from "./Components/Logout";
+import Recordings from "./Components/Recordings";
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="app" element={<Main />}>
         <Route path="" element={<Profile />} />
-        <Route path="recording" element={<RecordView/>} />
+        <Route path="recording/:type" element={<RecordView/>} />
         <Route path="portal" element={<Portal/>} />
         <Route path="jobs" element={<Myjobs/>} />
         <Route path="Logout" element={<Logout/>} />

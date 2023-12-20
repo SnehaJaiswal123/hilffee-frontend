@@ -3,7 +3,7 @@ import Jobs from './Jobs'
 import axios from 'axios'
 
 const Myjobs = () => {
-
+  const [prompt,setPrompt]=useState(false)
   const [jobs,setJobs]=useState([])
 
   useEffect(()=>{
@@ -25,7 +25,7 @@ const Myjobs = () => {
       {
         jobs.map((job,i)=>{
           console.log(1);
-          return <Jobs index={i+1} name={job.jobRole}/>
+          return <Jobs index={i+1} name={job.jobRole} jobid={job._id} videostatus={job.status}/>
         })
       }
       

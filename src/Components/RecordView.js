@@ -1,85 +1,128 @@
-import { useEffect, useRef } from "react";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import { useReactMediaRecorder } from "react-media-recorder";
+import { useLocation, useParams } from "react-router-dom";
 
 const RecordView = () => {
-  const { status,previewStream, startRecording, stopRecording, mediaBlobUrl } =
+  const {type}=useParams();
+  const [recorded, setRecorded] = useState(false);
+  const [recordedUrl, setRecordedUrl] = useState('');
+  const { status, previewStream, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ video: true });
 
-    const submitRecording=async()=>{
-      try {
-        const formData = new FormData();
-        formData.append('file', new File([mediaBlobUrl], 'recorded-video.webm'));
-    
-        const response = await axios.post('https://hilfee-backend.onrender.com/recording', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-    
-        console.log(response.data);
-    
-      } catch (error) {
-        console.error('Error uploading video:', error);
-    
-      } finally {
-        setIsUploading(false);
-      }
-    }
-
-    const ReStartRecording=()=>{
-      stopRecording()
-      startRecording()
-    }
-
-    const VideoPreview = ({ stream }) => {
-      const videoRef = useRef(null);
-    
-      useEffect(() => {
-        if (videoRef.current && stream) {
-          videoRef.current.srcObject = stream;
+  const submitRecording = async () => {
+    try {
+      const response = await axios.get(mediaBlobUrl, { responseType: "blob" });
+      const formData = new FormData();
+      formData.append(
+        "video",
+        new Blob([response.data], { type: "video/mp4" }),
+        "video.mp4"
+      );
+      formData.append('id',type)
+      const uploadResponse = await axios.post(
+        "https://hilfee-backend.onrender.com/recording",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
         }
-      }, [stream]);
-      if (!stream) {
-        return null;
+      );
+      console.log(uploadResponse.data);
+      setRecordedUrl(uploadResponse.data);
+    } catch (error) {
+      console.error("Error uploading video:", error);
+    }
+  };
+
+  const ReStartRecording = () => {
+    stopRecording();
+    startRecording();
+  };
+
+  const VideoPreview = ({ stream }) => {
+    const videoRef = useRef(null);
+
+    useEffect(() => {
+      if (videoRef.current && stream) {
+        videoRef.current.srcObject = stream;
       }
-      return <video ref={videoRef} width={500} height={500} autoPlay controls />;
-    };
+    }, [stream]);
+    if (!stream) {
+      return null;
+    }
+    return <video ref={videoRef} width={500} height={500} autoPlay controls />;
+  };
+
+  useEffect(()=>{
+     const getjob=async()=>{
+      try{
+        const response=await axios.get('https://hilfee-backend.onrender.com/getjobbyid',{
+        params:{id:type}
+       })
+       console.log('status',response.data.status);
+       if(response.data.status==true){
+          setRecorded(true)
+          console.log(response.data.videoUrl);
+          setRecordedUrl(response.data.videoUrl)
+       }
+      }
+      catch(e){
+        console.log(e);
+      }
+       
+     }
+     getjob()
+  },[])
 
   return (
     <div>
       {
-        status==='idle'?
-        <>
-        <video src={mediaBlobUrl} controls />
-        <button className='btn' onClick={startRecording}>Start Recording</button>
+        recorded==true?<>
+        <video src={recordedUrl} controls />
         </>:
         <>
         </>
       }
-  
-      {(status=='recording')?
-        <div className="vdopreview"><VideoPreview stream={previewStream}/></div>:
-         <></>
-      }
-      {status=='recording'?
-          <>
-          <button className='btn' onClick={stopRecording}>Stop Recording</button>
-          <button className='btn' onClick={ReStartRecording}>Restart Recording</button>
-          </>:
-          <></>
-      }
-      {
-        status=='stopped'?
+      {status === "idle"&&recorded!==true ? (
         <>
-        <video src={mediaBlobUrl} controls />
-        <button className='btn' onClick={submitRecording}>Submit</button>
-        </>:
+          <div className="vdopreview">
+          <video src={mediaBlobUrl} controls />
+          </div>
+          <button className="btn" onClick={startRecording}>
+            Start Recording
+          </button>
+        </>
+      ) : (
         <></>
-      }
-      
-      
+      )}
+
+      {status == "recording"&&recorded!==true ? (
+        <>
+          <div className="vdopreview">
+            <VideoPreview stream={previewStream} />
+          </div>
+          <button className="btn" onClick={stopRecording}>
+            Stop Recording
+          </button>
+          <button className="btn" onClick={ReStartRecording}>
+            Restart Recording
+          </button>
+        </>
+      ) : (
+        <></>
+      )}
+      {status == "stopped"&&recorded!==true ? (
+        <>
+          <video src={recorded} controls />
+          <button className="btn" onClick={submitRecording}>
+            Submit
+          </button>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
 
-export default RecordView
+export default RecordView;
