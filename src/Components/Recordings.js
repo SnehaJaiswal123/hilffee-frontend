@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import Webcam from "react-webcam";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 function WebcamStreamCapture() {
   const webcamRef = React.useRef(null);

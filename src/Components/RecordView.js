@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useReactMediaRecorder } from "react-media-recorder";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 const RecordView = () => {
   const {type}=useParams();
@@ -10,8 +12,11 @@ const RecordView = () => {
   const { status, previewStream, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ video: true });
 
+    const navigate=useNavigate()
+
   const submitRecording = async () => {
     try {
+      toast('Prompt submitted')
       const response = await axios.get(mediaBlobUrl, { responseType: "blob" });
       const formData = new FormData();
       formData.append(
@@ -29,6 +34,7 @@ const RecordView = () => {
       );
       console.log(uploadResponse.data);
       setRecordedUrl(uploadResponse.data);
+      navigate('/app/jobs')
     } catch (error) {
       console.error("Error uploading video:", error);
     }
@@ -121,6 +127,7 @@ const RecordView = () => {
       ) : (
         <></>
       )}
+      <ToastContainer></ToastContainer>
     </div>
   );
 };
